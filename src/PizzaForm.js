@@ -31,24 +31,23 @@ const PizzaForm = () => {
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
-  const validate = (event) => {
+  const validate = (e) => {
     const value =
-      event.target.type === "checkbox"
-        ? event.target.checked
-        : event.target.name;
+      e.target.type === "checkbox" ? e.target.checked : e.target.name;
     yup
-      .reach(formSchema, event.target.name)
-      .validate(value)
+      .reach(formSchema, e.target.name)
+      .validate(e.target.value)
+
       .then((valid) => {
         setErrors({
           ...errors,
-          [event.target.name]: "",
+          [e.target.name]: "",
         });
       })
       .catch((err) => {
         setErrors({
           ...errors,
-          [event.target.name]: err.errors[0],
+          [e.target.name]: err.errors[0],
         });
       });
   };
@@ -63,7 +62,7 @@ const PizzaForm = () => {
   // onChange function
   const onChange = (e) => {
     e.persist();
-    // validate(e); /*something wrong here, crashes when a radio is selected*/
+    validate(e); /*something wrong here, crashes when a radio is selected*/
     console.log(e.target.value, e.target.checked);
     const value = e.target.type === "radio" ? e.target.checked : e.target.value;
     setFormState({ ...formState, [e.target.name]: value });
@@ -98,6 +97,9 @@ const PizzaForm = () => {
             value={formState.name}
             onChange={onChange}
           />
+          {errors.name.length > 0 ? (
+            <p className="error">{errors.name}</p>
+          ) : null}
         </label>
 
         <h1> Build Your Own Pizza! </h1>
@@ -111,6 +113,9 @@ const PizzaForm = () => {
             <option value="Large">Large</option>
             <option value="Extralarge">Extra Large</option>
           </select>
+          {errors.psize.length > 0 ? (
+            <p className="error">{errors.psize}</p>
+          ) : null}
         </label>
 
         <h3> Select Your Sauce: </h3>
@@ -290,7 +295,7 @@ const PizzaForm = () => {
           <textarea name="instructions" />
         </label>
 
-        <button>Submit</button>
+        <button disabled={buttonDisabled}>Submit</button>
       </form>
     </div>
   );
