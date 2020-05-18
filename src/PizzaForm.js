@@ -113,9 +113,6 @@ const PizzaForm = () => {
             <option value="Large">Large</option>
             <option value="Extralarge">Extra Large</option>
           </select>
-          {errors.psize.length > 0 ? (
-            <p className="error">{errors.psize}</p>
-          ) : null}
         </label>
 
         <h3> Select Your Sauce: </h3>
