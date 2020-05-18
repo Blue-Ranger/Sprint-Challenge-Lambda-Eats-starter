@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import Pizza from "./Pizza";
+import PizzaForm from "./PizzaForm";
 
 const App = () => {
   return (
     <>
-      <h1>Lambda Eats</h1>
+      <h1>My Pizza App</h1>
 
       <Router>
         <Link to={`/pizza`}>
@@ -18,7 +18,7 @@ const App = () => {
           <button>Help</button>
         </Link>
         <Route path="/pizza">
-          <Pizza />
+          <PizzaForm />
         </Route>
         <Route path="/"></Route>
       </Router>
