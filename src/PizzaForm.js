@@ -1,42 +1,48 @@
 import React, { useState, useEffect } from "react";
 import * as yup from "yup";
+import axios from "axios";
 
 const formSchema = yup.object().shape({
-  id: yup.string().required(),
   name: yup
     .string()
     .min(2, "You name should have 2 characters")
     .required("You don't have a name?"),
-  type: yup.string().min(1).required(),
-  value: yup.string().required(),
+  psize: yup.string().required("Please chooose a size"),
+  redsauce: yup.boolean(),
+  garlic: yup.boolean(),
+  bbq: yup.boolean(),
+  spinach: yup.boolean(),
+  chedder: yup.boolean(),
+  pepperoni: yup.boolean(),
 });
 
-const PizzaForm = () => {
+const PizzaForm = (props) => {
   // managing state for form
   const [formState, setFormState] = useState({
-    id: "",
+    redsauce: true,
+    garlic: false,
+    bbq: false,
+    spinach: false,
+    chedder: false,
     name: "",
-    type: "",
-    value: "",
-    addOns: "",
+    instructions: "",
+    psize: "small",
+    pepperoni: false,
   });
 
   const [errors, setErrors] = useState({
-    id: "",
     name: "",
-    type: "",
-    value: "",
-    addOns: "",
+    instructions: "",
   });
-
-  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [order, setOrder] = useState({});
+  // const [buttonDisabled, setButtonDisabled] = useState(true);
 
   const validate = (e) => {
     const value =
-      e.target.type === "checkbox" ? e.target.checked : e.target.name;
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
     yup
       .reach(formSchema, e.target.name)
-      .validate(e.target.value)
+      .validate(value)
 
       .then((valid) => {
         setErrors({
@@ -50,39 +56,39 @@ const PizzaForm = () => {
           [e.target.name]: err.errors[0],
         });
       });
+    setFormState({
+      ...formState,
+      [e.target.name]: value,
+    });
   };
 
   // formSubmit function
   const formSubmit = (e) => {
     e.preventDefault();
-
-    console.log("form submitted!", formState);
+    console.log("Pizza ordered!");
+    axios
+      .post("https://reqres.in/api/users", formState)
+      .then((response) => {
+        setOrder(response.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   // onChange function
-  const onChange = (e) => {
-    e.persist();
-    validate(e); /*something wrong here, crashes when a radio is selected*/
-    console.log(e.target.value, e.target.checked);
-    const value = e.target.type === "radio" ? e.target.checked : e.target.value;
-    setFormState({ ...formState, [e.target.name]: value });
-  };
+  // const onChange = (e) => {
+  //   e.persist();
+  //   console.log("input changed!", e.target.value, e.target.checked);
+  //   validate(e);
+  // };
 
   // handleChange function
   const handleChange = (e) => {
     e.persist();
-    setFormState({
-      ...formState,
-      addOns: [formState.addOns, e.target.value],
-    });
+    console.log("input changed!", e.target.value, e.target.checked);
+    validate(e);
   };
 
   // use effect function
-  useEffect(() => {
-    formSchema.isValid(formState).then((valid) => {
-      setButtonDisabled(!valid);
-    });
-  }, [formState]);
 
   return (
     <div>
@@ -95,7 +101,7 @@ const PizzaForm = () => {
             id="name"
             placeholder="Save for future orders!"
             value={formState.name}
-            onChange={onChange}
+            onChange={handleChange}
           />
           {errors.name.length > 0 ? (
             <p className="error">{errors.name}</p>
@@ -119,40 +125,44 @@ const PizzaForm = () => {
 
         <label htmlFor="redsauce" className="redsauce">
           <input
-            type="radio"
+            id="redsauce"
+            type="checkbox"
             name="redsauce"
             value={formState.name}
-            onChange={onChange}
+            onChange={handleChange}
           />
           Original Red
         </label>
 
         <label htmlFor="garlic" className="garlic">
           <input
-            type="radio"
+            id="garlic"
+            type="checkbox"
             name="garlic"
             value={formState.name}
-            onChange={onChange}
+            onChange={handleChange}
           />
           Garlic Ranch
         </label>
 
         <label htmlFor="bbq" className="bbq">
           <input
-            type="radio"
+            id="bbq"
+            type="checkbox"
             name="bbq"
             value={formState.name}
-            onChange={onChange}
+            onChange={handleChange}
           />
           BBQ Sauce
         </label>
 
         <label htmlFor="spinach" className="spinach">
           <input
-            type="radio"
+            id="spinach"
+            type="checkbox"
             name="spinach"
             value={formState.name}
-            onChange={onChange}
+            onChange={handleChange}
           />
           Spinach Alfredo
         </label>
@@ -160,127 +170,22 @@ const PizzaForm = () => {
         <h3> Select Your Toppings: </h3>
 
         <label htmlFor="toppings">
-          Toppings: Plain
-          <input
-            id="toppings1"
-            type="checkbox"
-            name="addOns"
-            value={formState.name}
-            onChange={handleChange}
-          />
           <h3> Select Your Cheese: </h3>
           Chedder
           <input
-            id="toppings2"
+            id="chedder"
+            data-test-id="bestTopping"
             type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          Cheese
-          <input
-            id="toppings3"
-            type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          Three Cheese
-          <input
-            id="toppings4"
-            type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          ExtraCheese
-          <input
-            id="toppings5"
-            type="checkbox"
-            name="addOns"
+            name="chedder"
             onChange={handleChange}
           />
           <h3> Select Your Meat: </h3>
           Pepporoni
           <input
-            id="toppings6"
+            id="pepperoni"
             type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          Sausage
-          <input
-            id="toppings7"
-            type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          Canadian Bacon
-          <input
-            id="toppings8"
-            type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          Spicy Italian Sausage
-          <input
-            id="toppings9"
-            type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          GrilledChicken
-          <input
-            id="toppings10"
-            type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          <h3> Select Other Toppings: </h3>
-          Onions
-          <input
-            id="toppings11"
-            type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          Green Peppers
-          <input
-            id="toppings12"
-            type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          Diced Tomatoes
-          <input
-            id="toppings13"
-            type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          Black Olives
-          <input
-            id="toppings14"
-            type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          Roasted Garlic
-          <input
-            id="toppings15"
-            type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          Artichoke Hearts
-          <input
-            id="toppings16"
-            type="checkbox"
-            name="addOns"
-            onChange={handleChange}
-          />
-          Pineapple
-          <input
-            id="toppings17"
-            type="checkbox"
-            name="addOns"
+            name="pepperoni"
+            value={formState.name}
             onChange={handleChange}
           />
         </label>
@@ -292,7 +197,8 @@ const PizzaForm = () => {
           <textarea name="instructions" />
         </label>
 
-        <button disabled={buttonDisabled}>Submit</button>
+        <button data-test-id="submitButton">Submit</button>
+        <pre>{JSON.stringify(order, null, 2)}</pre>
       </form>
     </div>
   );
