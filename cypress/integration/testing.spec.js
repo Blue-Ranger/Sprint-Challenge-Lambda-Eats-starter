@@ -10,12 +10,22 @@ describe("", function () {
   });
 
   it("should allow me to select toppings", function () {
-    cy.get('[data-test-id="bestTopping"]').click().should("be.checked");
+    cy.get('input[name="pepperoni"]').check().should("be.checked");
+    cy.get('input[name="chedder"]').check().should("be.checked");
+    cy.get('input[name="redsauce"]').check().should("be.checked");
+    cy.get('input[name="garlic"]').check().should("be.checked");
+    cy.get('input[name="bbq"]').check().should("be.checked");
+    cy.get('input[name="spinach"]').check().should("be.checked");
   });
 
   it("should submit form", function () {
     cy.get('[name="name"]').type("Angelique");
-    cy.get('[data-test-id="bestTopping"]').click();
+    cy.get('input[name="pepperoni"]').check().should("be.checked");
+    cy.get('input[name="chedder"]').check().should("be.checked");
+    cy.get('input[name="redsauce"]').check().should("be.checked");
+    cy.get('input[name="garlic"]').check().should("be.checked");
+    cy.get('input[name="bbq"]').check().should("be.checked");
+    cy.get('input[name="spinach"]').check().should("be.checked");
     cy.get('[data-test-id="submitButton"]').click();
   });
 });

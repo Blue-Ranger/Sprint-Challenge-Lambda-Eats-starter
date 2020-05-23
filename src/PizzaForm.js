@@ -19,14 +19,14 @@ const formSchema = yup.object().shape({
 const PizzaForm = (props) => {
   // managing state for form
   const [formState, setFormState] = useState({
-    redsauce: true,
+    redsauce: false,
     garlic: false,
     bbq: false,
     spinach: false,
     chedder: false,
     name: "",
     instructions: "",
-    psize: "small",
+    psize: "",
     pepperoni: false,
   });
 
@@ -113,7 +113,12 @@ const PizzaForm = (props) => {
         <label htmlFor="size">
           <h3> What Size Pizza? </h3>
           Pizza Size:
-          <select id="psize" name="psize">
+          <select
+            id="psize"
+            name="psize"
+            value={formState.psize}
+            onChange={handleChange}
+          >
             <option value="Small">Small</option>
             <option value="Medium">Medium</option>
             <option value="Large">Large</option>
@@ -128,7 +133,7 @@ const PizzaForm = (props) => {
             id="redsauce"
             type="checkbox"
             name="redsauce"
-            value={formState.name}
+            checked={formState.redsauce}
             onChange={handleChange}
           />
           Original Red
@@ -139,7 +144,7 @@ const PizzaForm = (props) => {
             id="garlic"
             type="checkbox"
             name="garlic"
-            value={formState.name}
+            value={formState.garlic}
             onChange={handleChange}
           />
           Garlic Ranch
@@ -150,7 +155,7 @@ const PizzaForm = (props) => {
             id="bbq"
             type="checkbox"
             name="bbq"
-            value={formState.name}
+            value={formState.bbq}
             onChange={handleChange}
           />
           BBQ Sauce
@@ -161,7 +166,7 @@ const PizzaForm = (props) => {
             id="spinach"
             type="checkbox"
             name="spinach"
-            value={formState.name}
+            value={formState.spinach}
             onChange={handleChange}
           />
           Spinach Alfredo
