@@ -1,0 +1,21 @@
+1. In 1-2 sentences, explain what React's `useRouteMatch` hook is used for.
+
+    A.
+        is useful any time you are using a <Route> just so you can get access to its match data, including all of the times you might render a <Route> all by itself outside of a <Switch> . It matches the URL exactly like a <Route> would
+
+
+2. How would you explain form validation to someone who has never programmed before?
+
+    A.
+        Basic Validation − First of all, the form must be checked to make sure all the mandatory fields are filled in. It would require just a loop through each field in the form and check for data.
+
+        Data Format Validation − Secondly, the data that is entered must be checked for correct form and value. Your code must include appropriate logic to test correctness of data.
+
+
+
+3. In 1-2 sentences, define end to end testing.
+
+    A.
+        End-to-end testing is a technique used to test whether the flow of an application right from start to finish is behaving as expected. The purpose of performing end-to-end testing is to identify system dependencies and to ensure that the data integrity is maintained between various system components and systems.
+
+        The entire application is tested for critical functionalities such as communicating with the other systems, interfaces, database, network, and other applications.
